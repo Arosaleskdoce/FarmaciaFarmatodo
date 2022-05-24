@@ -5,41 +5,44 @@ import sqlite3
 
 class Product:
     
+    # CONEXION A LA BASE DE DATOS, CREADA EN SQLITE
     db_name = 'database.db'
-
+    
+    # SE CREA LA VENTANA, DONDE ESTARAN BOTONES,CAMPOS,ETC...
     def __init__(self, window):
         self.wind = window
         self.wind.title('FARMATODO')
 
-        # Creacion del contenedor Frame
+        # CONTENEDOR FRAME
         frame = LabelFrame(self.wind, text = 'SISTEMA DE ACTUALIZACION DE STOCK')
-        frame.grid(row = 0, column = 0, columnspan= 3 , pady = 20)
+        frame.grid(row = 0, column = 0, columnspan= 3 , pady = 30)
 
-        # New product Input
+        # TITULO Y INPUT DEL PRODUCTO 
         Label(frame, text = 'Agregar nuevo producto: ').grid(row = 1, column = 0)
-        self.aggproducto = Entry(frame)
+        self.aggproducto = Entry(frame, bg="skyblue")
         self.aggproducto.focus()
         self.aggproducto.grid(row = 1, column = 1)
 
-        # Precio Input
+        # TITULO Y INPUT DEL PRECIO 
         Label(frame, text = 'Precio: ').grid(row = 2, column = 0)
-        self.precio = Entry(frame)
+        self.precio = Entry(frame, bg="skyblue")
         self.precio.grid(row = 2, column = 1)
 
-        # Boton para guardar e añadir a la bd
+        # BOTON QUE GUARDARA LOS DATOS NUEVOS DE EN 
         ttk.Button(frame, text = 'GUARDAR', command=self.add_product).grid(row = 3, columnspan = 2, sticky = W + E)
         
-        #Mensaje pos accion
+        # SE ESTABLECE QUE EL SELF.MENSAJE APARECERA CON LETRAS ROJAS (RED) Y QUE CON GRID SE UBICARA EN LA FILA 3, COLUMNA 0 Y QUE CON SPAN SERA CENTRADO,
+        #POR ULTIMO EL PARAMETRO STICKY HACE QUE SE VEA DE WESTE AND EAST (ESTE Y OESTE) 
         self.mensaje = Label(text='', fg = 'red')
         self.mensaje.grid(row=3, column = 0, columnspan = 2, sticky = W + E)
 
-        # Tabla en la vista para dividir producto de precios
+        # SE AGREGA UNA VISTA TREE(TIPO LISTA) Y SE DECLARA DOS TEXT(PRODUCTO Y PRECIO)
         self.tree = ttk.Treeview(height= 10, columns = 2)
         self.tree.grid(row = 4, column = 0, columnspan = 2)
         self.tree.heading('#0' , text = 'PRODUCTO', anchor=CENTER)
-        self.tree.heading('#1' , text = 'PRECIO', anchor=CENTER)
+        self.tree.heading('#1' , text = 'PRECIO', anchor=CENTER, )
 
-        #Botones parte inferior de la tabla
+        # BOTONES PARA BORRAR Y EDITAR QUE SE POSICIONARA 
         ttk.Button(text = 'BORRAR', command = self.delete_product).grid(row = 5, column = 0, sticky= W + E)
         ttk.Button(text = 'EDITAR', command= self.edit_product).grid(row = 5, column = 1, sticky= W + E)
 
@@ -53,17 +56,19 @@ class Product:
           return result
 
     def get_products(self):
-        #Limpiar datos
+
+        # LIMPIAR DATOS DE DESPUES DE PRESIONAR EL BOTON GUARDAR 
         records = self.tree.get_children()
         for element in records:
             self.tree.delete(element)
-        #query datos
+
+        #QUERY DE DATOS
         query = 'SELECT *FROM product ORDER BY name DESC'
         db_rows = self.run_query(query)
         for row in db_rows:
             self.tree.insert('', 0, text = row[1], values= row[2])
 
-        #Condicion para validar campos input
+        # SE CREA CONDICION QUE OBLIGUE A LLENAR AMBOS INPUTA CON DATOS
     def validation(self):
         return len(self.aggproducto.get()) != 0 and len(self.precio.get()) !=0
 
@@ -72,7 +77,7 @@ class Product:
             query = 'INSERT INTO product Values(NULL, ?, ?)'
             parameters = (self.aggproducto.get(), self.precio.get())
             self.run_query(query, parameters)
-            self.mensaje['text'] = 'El producto {} fue agregado al stock satisfactoriamente'.format(self.aggproducto.get())
+            self.mensaje['text'] = 'EL PRODUCTO {} SE AGREGO CORRECTAMENTE'.format(self.aggproducto.get())
             self.aggproducto.delete(0, END)
             self.precio.delete(0, END)
         else:
@@ -84,8 +89,9 @@ class Product:
         try:
             self.tree.item(self.tree.selection())['text'][0]
         except IndexError as e:
-            self.mensaje['text'] = '¡CAMPEON! RECUERDA SELECCIONAR PARA BORRAR REGISTROS'
+            self.mensaje['text'] = 'RECUERDA SELECCIONAR PARA BORRAR REGISTROS'
             return
+    
         self.mensaje['text'] = ''
         aggproducto = self.tree.item(self.tree.selection())['text']
         query = 'DELETE FROM product WHERE name = ?'
@@ -93,43 +99,42 @@ class Product:
         self.mensaje['text'] = 'Registro de producto {} borrado'.format(aggproducto)
         self.get_products()
 
-        #Condicion para editar 
+        #SE CREA CONDICION PARA EDITAR DATOS Y DAR UN MENSAJE EN CASO DE QUE NO SE TENGA SELECIONADO DATOS  
     def edit_product(self):
         self.mensaje['text'] = ''
         try:
             self.tree.item(self.tree.selection())['text'][0]
         except IndexError as e:
-            self.mensaje['text'] = '¡CAMPEON! RECUERDA SELECCIONAR PARA BORRAR REGISTROS'
+            self.mensaje['text'] = 'RECUERDA SELECCIONAR PARA EDITAR REGISTROS'
             return
         aggproducto = self.tree.item(self.tree.selection())['text']
         antiguo_precio = self.tree.item(self.tree.selection())['values'][0]
         self.edit_wind = Toplevel()
         self.edit_wind.title = 'Edicion Producto'
 
-        #antiguo producto
+        #PRODUCTO ANTIGUO
         Label(self.edit_wind, text = 'Producto anterior').grid(row = 0, column = 1)
         Entry(self.edit_wind, textvariable = StringVar(self.edit_wind, value = aggproducto), state = 'readonly').grid(row = 0, column = 2)    
 
-        #nuevo producto
+        #PRODUCTO NUEVO
         Label(self.edit_wind, text = 'Nuevo Producto').grid(row = 1, column = 1)
         nuevo_aggproducto = Entry(self.edit_wind) 
         nuevo_aggproducto.grid(row = 1, column = 2) 
     
 
-        #antiguo precio
+        #PRECIO ANTIGUO 
         Label(self.edit_wind, text = 'Precio Anterior').grid(row = 2, column = 1)
         Entry(self.edit_wind, textvariable = StringVar(self.edit_wind, value = antiguo_precio), state = 'readonly').grid(row = 2, column = 2)    
 
-        #nuevo precio
+        #PRECIO NUEVO
         Label(self.edit_wind, text = 'Nuevo Precio').grid(row = 3, column = 1)
         nuevo_precio = Entry(self.edit_wind) 
         nuevo_precio.grid(row = 3, column = 2) 
 
-        #Boton para guardar lo actualizado
-
+        #SE CREA BOTON PARA ACTUALIZAR EN LA NUEVA VENTANA
         Button(self.edit_wind, text = 'ACTUALIZAR', command = lambda: self.edit_records(nuevo_aggproducto.get(), aggproducto, nuevo_precio.get(), antiguo_precio)).grid(row = 4, column=2, sticky= W)
        
-        #Condicion para actualizar con su consulta y query
+        #SE CREA COND PARA LA QUERY 
     def edit_records(self, nuevo_aggproducto, aggproducto, nuevo_precio, antiguo_precio):
         query = 'UPDATE product Set name = ?, price = ? WHERE name = ? AND price = ?'
         parameters = (nuevo_aggproducto , nuevo_precio, aggproducto, antiguo_precio)
