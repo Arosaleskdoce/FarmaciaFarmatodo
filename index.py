@@ -118,7 +118,7 @@ class Product:
 
         #PRODUCTO NUEVO
         Label(self.edit_wind, text = 'Nuevo Producto').grid(row = 1, column = 1)
-        nuevo_aggproducto = Entry(self.edit_wind) 
+        nuevo_aggproducto = Entry(self.edit_wind,bg="skyblue") 
         nuevo_aggproducto.grid(row = 1, column = 2) 
     
 
@@ -128,7 +128,7 @@ class Product:
 
         #PRECIO NUEVO
         Label(self.edit_wind, text = 'Nuevo Precio').grid(row = 3, column = 1)
-        nuevo_precio = Entry(self.edit_wind) 
+        nuevo_precio = Entry(self.edit_wind, bg="skyblue") 
         nuevo_precio.grid(row = 3, column = 2) 
 
         #SE CREA BOTON PARA ACTUALIZAR EN LA NUEVA VENTANA
