@@ -6,15 +6,23 @@ import sqlite3
 
 class Product:
     
+<<<<<<< HEAD
         #CONEXION A LA BASE DE DATOS, CREADA EN SQLITE
     db_name = 'database.db'
     
         #SE CREA LA VENTANA, DONDE ESTARAN BOTONES,CAMPOS,ETC...
+=======
+    # CONEXION A LA BASE DE DATOS, CREADA EN SQLITE
+    db_name = 'database.db'
+    
+    # SE CREA LA VENTANA, DONDE ESTARAN BOTONES,CAMPOS,ETC...
+>>>>>>> d35b2ce01003c9bf51dec1a1334b8ae4dd73c4a5
     def __init__(self, window):
         self.wind = window
         self.wind.title('FARMATODO')
         self.wind.iconbitmap("farmatodo.ico")
 
+<<<<<<< HEAD
     #def login(self,window):
         #self.wind = window
         #self.wind.geometry("300x380")
@@ -25,31 +33,57 @@ class Product:
         frame.grid(row = 0, column = 0, columnspan= 3 , pady = 30)
 
         #TITULO Y INPUT DEL PRODUCTO 
+=======
+        # CONTENEDOR FRAME
+        frame = LabelFrame(self.wind, text = 'SISTEMA DE ACTUALIZACION DE STOCK')
+        frame.grid(row = 0, column = 0, columnspan= 3 , pady = 30)
+
+        # TITULO Y INPUT DEL PRODUCTO 
+>>>>>>> d35b2ce01003c9bf51dec1a1334b8ae4dd73c4a5
         Label(frame, text = 'Agregar nuevo producto: ').grid(row = 1, column = 0)
         self.aggproducto = Entry(frame, bg="skyblue")
         self.aggproducto.focus()
         self.aggproducto.grid(row = 1, column = 1)
 
+<<<<<<< HEAD
         #TITULO Y INPUT DEL PRECIO 
+=======
+        # TITULO Y INPUT DEL PRECIO 
+>>>>>>> d35b2ce01003c9bf51dec1a1334b8ae4dd73c4a5
         Label(frame, text = 'Precio: ').grid(row = 2, column = 0)
         self.precio = Entry(frame, bg="skyblue")
         self.precio.grid(row = 2, column = 1)
 
+<<<<<<< HEAD
         #BOTON QUE GUARDARA LOS DATOS NUEVOS DE EN 
         ttk.Button(frame, text = 'GUARDAR', command=self.add_product).grid(row = 3, columnspan = 2, sticky = W + E)
         
         #SE ESTABLECE QUE EL SELF.MENSAJE APARECERA CON LETRAS ROJAS (RED) Y QUE CON GRID SE UBICARA EN LA FILA 3, COLUMNA 0 Y QUE CON SPAN SERA CENTRADO,
+=======
+        # BOTON QUE GUARDARA LOS DATOS NUEVOS DE EN 
+        ttk.Button(frame, text = 'GUARDAR', command=self.add_product).grid(row = 3, columnspan = 2, sticky = W + E)
+        
+        # SE ESTABLECE QUE EL SELF.MENSAJE APARECERA CON LETRAS ROJAS (RED) Y QUE CON GRID SE UBICARA EN LA FILA 3, COLUMNA 0 Y QUE CON SPAN SERA CENTRADO,
+>>>>>>> d35b2ce01003c9bf51dec1a1334b8ae4dd73c4a5
         #POR ULTIMO EL PARAMETRO STICKY HACE QUE SE VEA DE WESTE AND EAST (ESTE Y OESTE) 
         self.mensaje = Label(text='', fg = 'red')
         self.mensaje.grid(row=3, column = 0, columnspan = 2, sticky = W + E)
 
+<<<<<<< HEAD
         #SE AGREGA UNA VISTA TREE(TIPO LISTA) Y SE DECLARA DOS TEXT(PRODUCTO Y PRECIO)
+=======
+        # SE AGREGA UNA VISTA TREE(TIPO LISTA) Y SE DECLARA DOS TEXT(PRODUCTO Y PRECIO)
+>>>>>>> d35b2ce01003c9bf51dec1a1334b8ae4dd73c4a5
         self.tree = ttk.Treeview(height= 10, columns = 2)
         self.tree.grid(row = 4, column = 0, columnspan = 2)
         self.tree.heading('#0' , text = 'PRODUCTO', anchor=CENTER)
         self.tree.heading('#1' , text = 'PRECIO', anchor=CENTER, )
 
+<<<<<<< HEAD
         #BOTONES PARA BORRAR Y EDITAR QUE SE POSICIONARA 
+=======
+        # BOTONES PARA BORRAR Y EDITAR QUE SE POSICIONARA 
+>>>>>>> d35b2ce01003c9bf51dec1a1334b8ae4dd73c4a5
         ttk.Button(text = 'BORRAR', command = self.delete_product).grid(row = 5, column = 0, sticky= W + E)
         ttk.Button(text = 'EDITAR', command= self.edit_product).grid(row = 5, column = 1, sticky= W + E)
 
@@ -64,7 +98,11 @@ class Product:
 
     def get_products(self):
 
+<<<<<<< HEAD
         #LIMPIAR DATOS DE DESPUES DE PRESIONAR EL BOTON GUARDAR 
+=======
+        # LIMPIAR DATOS DE DESPUES DE PRESIONAR EL BOTON GUARDAR 
+>>>>>>> d35b2ce01003c9bf51dec1a1334b8ae4dd73c4a5
         records = self.tree.get_children()
         for element in records:
             self.tree.delete(element)
@@ -75,7 +113,11 @@ class Product:
         for row in db_rows:
             self.tree.insert('', 0, text = row[1], values= row[2])
 
+<<<<<<< HEAD
         #SE CREA CONDICION QUE OBLIGUE A LLENAR AMBOS INPUTA CON DATOS
+=======
+        # SE CREA CONDICION QUE OBLIGUE A LLENAR AMBOS INPUTA CON DATOS
+>>>>>>> d35b2ce01003c9bf51dec1a1334b8ae4dd73c4a5
     def validation(self):
         return len(self.aggproducto.get()) != 0 and len(self.precio.get()) !=0
 
