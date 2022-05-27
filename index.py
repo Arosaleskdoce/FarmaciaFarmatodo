@@ -15,9 +15,9 @@ class Product:
         self.wind.title('FARMATODO')
         self.wind.iconbitmap("farmatodo.ico")
 
-    def login(self,window):
-        self.wind = window
-        self.wind.geometry("300x380")
+    #def login(self,window):
+        #self.wind = window
+        #self.wind.geometry("300x380")
         
 
         #CONTENEDOR FRAME
